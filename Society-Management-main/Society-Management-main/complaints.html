@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Complaints - Shantai Niwas B</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h2>Complaint System</h2>
+  <button class="back-btn" onclick="window.location.href='dashboard.html'">
+    Back
+  </button>
+</header>
+
+<div class="container">
+
+  <!-- Add Complaint -->
+  <div class="card">
+    <h3>Submit Complaint</h3>
+
+    <textarea id="complaintText" 
+      placeholder="Write your complaint..." 
+      style="width:100%; padding:10px; height:100px;">
+    </textarea>
+
+    <button onclick="submitComplaint()">Submit</button>
+  </div>
+
+  <!-- Complaint List -->
+  <div class="card">
+    <h3>All Complaints</h3>
+
+    <div id="complaintList">
+      <p>No complaints yet.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="module" src="complaints.js"></script>
+
+</body>
+</html>

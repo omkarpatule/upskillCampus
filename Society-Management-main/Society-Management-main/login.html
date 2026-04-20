@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Shantai Niwas B</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background: #ffffff;
+      padding: 40px;
+      width: 350px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .login-container input:focus {
+      border-color: #2c5364;
+      box-shadow: 0 0 5px rgba(44,83,100,0.5);
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #2c5364;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-container button:hover {
+      background: #203a43;
+    }
+
+    #error {
+      margin-top: 15px;
+      font-size: 14px;
+      color: red;
+    }
+
+    .login-container a {
+      text-decoration: none;
+      color: #2c5364;
+      font-weight: bold;
+    }
+
+    .login-container a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="login-container">
+
+  <h2>Society Login</h2>
+
+  <input type="email" id="email" placeholder="Email Address">
+  <input type="password" id="password" placeholder="Password">
+
+  <button onclick="login()">Login</button>
+
+  <p id="error"></p>
+
+  <p>
+    Don't have account?
+    <a href="register.html">Register here</a>
+  </p>
+
+</div>
+
+<script type="module">
+
+import { auth, db } from "./firebase-config.js";
+import { signInWithEmailAndPassword }
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import { doc, getDoc }
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+window.login = async function() {
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const errorEl = document.getElementById("error");
+
+  if (!email || !password) {
+    errorEl.innerText = "Please enter email and password.";
+    return;
+  }
+
+  try {
+
+    const userCredential =
+      await signInWithEmailAndPassword(auth, email, password);
+
+    const user = userCredential.user;
+
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+
+    if (!userDoc.exists()) {
+      errorEl.innerText = "User record not found.";
+      return;
+    }
+
+    const data = userDoc.data();
+
+    if (data.status !== "approved") {
+      errorEl.innerText = "Waiting for admin approval.";
+      return;
+    }
+
+    // 🔥 Role-based redirect
+    if (data.role === "admin") {
+      window.location.href = "admin-dashboard.html";
+    } else {
+      window.location.href = "dashboard.html";
+    }
+
+  } catch (error) {
+    errorEl.innerText = error.message;
+  }
+
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard - Shantai Niwas B</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+    }
+
+    /* HEADER */
+    header {
+      background: #0f2027;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 {
+      margin: 0;
+    }
+
+    .logout-btn {
+      background: #ff4d4d;
+      border: none;
+      padding: 8px 15px;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    /* LAYOUT */
+    .container {
+      padding: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    .user-card {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .user-card p {
+      margin: 5px 0;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      margin-right: 5px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+
+    .approve { background: #28a745; color: white; }
+    .reject { background: #dc3545; color: white; }
+    .treasurer { background: #007bff; color: white; }
+
+    .nav-buttons {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .nav-buttons button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      background: #2c5364;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .nav-buttons button:hover {
+      background: #203a43;
+    }
+
+    @media(max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<header>
+  <h2>Shantai Niwas B - Admin Dashboard</h2>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+
+  <!-- 🔹 Pending Users -->
+  <div class="card">
+    <h3>Pending User Approvals</h3>
+    <div id="pendingUsers">
+      <p>No pending users.</p>
+    </div>
+  </div>
+
+  <!-- 🔹 Approved Users -->
+  <div class="card">
+    <h3>Approved Users</h3>
+    <div id="approvedUsers">
+      <p>No approved users found.</p>
+    </div>
+  </div>
+
+  <!-- 🔹 Navigation -->
+  <div class="nav-buttons">
+    <button onclick="window.location.href='accounts.html'">
+      Society Accounts
+    </button>
+
+    <button onclick="window.location.href='dashboard.html'">
+      User Dashboard
+    </button>
+  </div>
+
+</div>
+
+<script type="module" src="admin-dashboard.js"></script>
+
+</body>
+</html>
