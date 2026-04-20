@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register - Shantai Niwas B</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background: #ffffff;
+      padding: 40px;
+      width: 350px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .login-container input:focus {
+      border-color: #2c5364;
+      box-shadow: 0 0 5px rgba(44,83,100,0.5);
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #2c5364;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-container button:hover {
+      background: #203a43;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-container a {
+      text-decoration: none;
+      color: #2c5364;
+      font-weight: bold;
+    }
+
+    .login-container a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="login-container">
+
+  <h2>Society Registration</h2>
+
+  <input type="text" id="name" placeholder="Full Name">
+  <input type="text" id="flatNo" placeholder="Flat Number">
+  <input type="email" id="email" placeholder="Email Address">
+  <input type="password" id="password" placeholder="Password (min 6 characters)">
+
+  <button onclick="register()">Register</button>
+
+  <p id="message"></p>
+
+  <p>
+    Already have account?
+    <a href="login.html">Login here</a>
+  </p>
+
+</div>
+
+<script type="module">
+
+import { auth, db } from "./firebase-config.js";
+import { createUserWithEmailAndPassword }
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import { doc, setDoc, serverTimestamp }
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+window.register = async function() {
+
+  const name = document.getElementById("name").value.trim();
+  const flatNo = document.getElementById("flatNo").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const message = document.getElementById("message");
+
+  if (!name || !flatNo || !email || !password) {
+    message.style.color = "red";
+    message.innerText = "Please fill all fields.";
+    return;
+  }
+
+  if (password.length < 6) {
+    message.style.color = "red";
+    message.innerText = "Password must be at least 6 characters.";
+    return;
+  }
+
+  try {
+
+    const userCredential =
+      await createUserWithEmailAndPassword(auth, email, password);
+
+    const user = userCredential.user;
+
+    await setDoc(doc(db, "users", user.uid), {
+      name: name,
+      flatNo: flatNo,
+      email: email,
+      role: "owner",
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    message.style.color = "green";
+    message.innerText =
+      "Registration successful. Wait for admin approval.";
+
+  } catch (error) {
+    message.style.color = "red";
+    message.innerText = error.message;
+  }
+
+};
+
+</script>
+
+</body>
+</html>
